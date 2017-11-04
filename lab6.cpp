@@ -277,6 +277,11 @@ vector<size_t> find_connected_components(Graph& G)
 	return componentId;
 }
 
+vector<size_t> find_strongly_connected_components(Graph& G)
+{
+	Graph r_graph = G.reverseGraph();
+}
+
 
 
 
