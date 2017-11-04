@@ -253,6 +253,22 @@ void explore(Graph & G, int node, bool* visited, vector<size_t> & componentId, i
 	}
 }
 
+void exploreDirected(Graph & G, int node, bool* visited,  int * postSortedNodes, int& index)
+{
+	visited[node] = true;
+	
+	vector<list<Node> > adjList = G.getAdjList();
+	for (list<Node>::const_iterator it=adjList[node].begin(); it != adjList[node].end(); it++)
+	{
+		if(!visited[it->id()])
+		{
+			explore(G,it->id(),visited,postSortedNodes,index);
+			postSortedNodes[index]= it->id();
+			index--;
+		}
+	}
+}
+
 vector<size_t> find_connected_components(Graph& G)
 {
 	const int nodeSize = G.num_nodes();
@@ -280,6 +296,37 @@ vector<size_t> find_connected_components(Graph& G)
 vector<size_t> find_strongly_connected_components(Graph& G)
 {
 	Graph r_graph = G.reverseGraph();
+	const int nodeSize = G.num_nodes();
+	int postSortedNodes[nodeSize];
+	bool visited[nodeSize];
+	int index = nodeSize -1;
+	vector<size_t> componentId (nodeSize);
+	size_t component;
+	
+	for(int i=0; i<nodeSize; i++)
+	{
+		visited[i] = false;
+	}
+	
+	for(int i=0; i<nodeSize; i++)
+	{
+		
+		if(!visited[i])
+		{
+			exploreDirected(r_graph, i,  visited,  postSortedNodes, index);
+			postSortedNodes[index]= it->id();
+			index--;
+		}
+	}
+	
+	for(int i=0; i<nodeSize; i++)
+	{
+		explore(G,postSortedNodes[i],visited,componentId,component);
+		component++;
+	}
+	
+	return componentId;
+	
 }
 
 
