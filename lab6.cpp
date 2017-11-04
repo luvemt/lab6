@@ -13,7 +13,7 @@ private :
 	string m_name; // a string that labels the node
 	int m_id ; // a unique integer from 0 t o n−1,
 			   // where n i s the t o t a l number of nodes
-	int component;
+	int component; //component id for the node;
 public :
 	Node () {} ;
 	Node ( const string & name, int id )
@@ -235,6 +235,44 @@ void testall ()
     	string outputfilename = "out_large"+ s+ ".txt";
     	g.save(outputfilename);
     }
+}
+
+vector<size_t> find_connected_components(Graph& G)
+{
+	const int nodeSize = G.num_nodes();
+	vector<size_t> componentId (nodeSize);
+	bool visited[nodeSize];
+	size_t component = 0;
+	
+	for(int i=0; i<nodeSize; i++)
+	{
+		visited[i] = false;
+	}
+	
+	for(int i=0; i<nodeSize; i++)
+	{
+		if(!visited[i])
+		{
+			explore(G,i,visited,componentId,component);
+			component++;
+		}
+	}
+	
+	
+}
+
+void explore(Graph & G, int node, bool* visited, vector<size_t> & componentId, int component)
+{
+	visited[node] = true;
+	componentId[node] = component;
+	vector<list<Node> > adjList = G.getAdjList();
+	for (list<Node>::const_iterator it=adjList[node].begin(); it != adjList[node].end(); it++)
+	{
+		if(!visited[it->id()])
+		{
+			explore(G,it->id(),visited,componentId,component);
+		}
+	}
 }
 
 
