@@ -85,6 +85,26 @@ public:
 		return m_nodes.size();
 	}
 	
+	vector<list<Node> > getAdjList() const
+	{
+		return m_adjList;
+	}
+	
+	vector<Node> getNodesList() const
+	{
+		return m_nodes;
+	}
+	
+	void setAdjList(vector<list<Node> > adjList)
+	{
+		m_adjList = adjList;
+	}
+	
+	void setNodes(vector<Node> nodesList)
+	{
+		m_nodes = nodesList;
+	}
+	
 
 	//Create a graph from a tab-separated text edage list file to adjacency lists
 	void scan( string  file)
@@ -169,6 +189,26 @@ public:
 		}
 
 		return -1;
+	}
+	
+	//Reverses a directed graph
+	Graph reverseGraph()
+	{
+		vector<list<Node> > o_adjList = g.getAdjList();
+		const int listLength = o_adjList.size();
+		vector<list<Node> > r_adjList(listLength);
+		Graph r_graph;
+		
+		for(int i =0; i<listLength; i++)
+		{
+			for (list<Node>::const_iterator it=o_adjList[i].begin(); it != o_adjList[i].end(); it++)
+			{
+				r_adjList[it->id()].push_back(g.getNode(i));
+			}
+		}
+		r_graph.setAdjList(r_adjList);
+		r_graph.setNodes(g.getNodesList());
+		return r_graph;
 	}
 	
 
