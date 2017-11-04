@@ -237,6 +237,22 @@ void testall ()
     }
 }
 
+
+
+void explore(Graph & G, int node, bool* visited, vector<size_t> & componentId, int component)
+{
+	visited[node] = true;
+	componentId[node] = component;
+	vector<list<Node> > adjList = G.getAdjList();
+	for (list<Node>::const_iterator it=adjList[node].begin(); it != adjList[node].end(); it++)
+	{
+		if(!visited[it->id()])
+		{
+			explore(G,it->id(),visited,componentId,component);
+		}
+	}
+}
+
 vector<size_t> find_connected_components(Graph& G)
 {
 	const int nodeSize = G.num_nodes();
@@ -258,22 +274,10 @@ vector<size_t> find_connected_components(Graph& G)
 		}
 	}
 	
-	
+	return componentId;
 }
 
-void explore(Graph & G, int node, bool* visited, vector<size_t> & componentId, int component)
-{
-	visited[node] = true;
-	componentId[node] = component;
-	vector<list<Node> > adjList = G.getAdjList();
-	for (list<Node>::const_iterator it=adjList[node].begin(); it != adjList[node].end(); it++)
-	{
-		if(!visited[it->id()])
-		{
-			explore(G,it->id(),visited,componentId,component);
-		}
-	}
-}
+
 
 
 int main ()
